@@ -5,8 +5,9 @@ import chardet
 
 def fetch(url):
     data = urllib.request.urlopen(url).read()
-    chardit1 = chardet.detect(data1)
-    html = data.decode('gbk')
+    encode = chardet.detect(data)['encoding']
+    print(encode)
+    html = data.decode(encode)
     doneset.add(url)
     print(html)
     return html
