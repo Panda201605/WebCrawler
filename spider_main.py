@@ -11,7 +11,7 @@ Created on 2015-12-31
 @author: Itachi 
 '''
 
-from crawler import url_manager, html_downloader, html_parser, html_outputer
+import url_manager, html_downloader, html_parser, html_outputer
 
 
 # 爬虫类
