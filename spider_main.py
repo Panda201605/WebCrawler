@@ -1,21 +1,21 @@
 # coding:utf8
 
-'''
+"""
 原文网址：http://blog.csdn.net/gvfdbdf/article/details/50446144
-'''
-''''' 
-crawler main function, call for other function 
- 
-Created on 2015-12-31 
- 
-@author: Itachi 
-'''
+crawler main function, call for other function
+Created on 2015-12-31
+@author: Itachi
+"""
 
-import url_manager, html_downloader, html_parser, html_outputer
+import html_downloader
+import html_outputer
+import html_parser
+import url_manager
 
 
 # 爬虫类
 class SpiderMain(object):
+
     # 初始化爬虫的管理器、下载器、解析器和输出
     def __init__(self):
         self.urls = url_manager.UrlManager()

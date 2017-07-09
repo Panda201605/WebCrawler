@@ -1,21 +1,21 @@
 # coding:utf8
 
-''''' 
-crawler main function, call for other function 
- 
-Created on 2015-12-31 
- 
-'''
+"""
+crawler main function, call for other function
+Created on 2015-12-31
+"""
+
 import re
-
-from bs4 import BeautifulSoup
-
 from urllib.parse import urljoin
+
+from bs4 import BeautifulSoup as BeautifulSoup
+
 
 # 实现解析器的类
 class HtmlParse(object):
 
     # 从网页解析中获得url
+    @staticmethod
     def _get_new_urls(self, page_url, soup):
         new_urls = set()
         # 匹配/view/123.htm形式的url，得到所有的词条url
@@ -71,4 +71,3 @@ class HtmlParse(object):
         print(new_data) 
         """
         return new_urls, new_data
-          
