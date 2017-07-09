@@ -8,7 +8,7 @@ Created on 2015-12-31
 import re
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup as BeautifulSoup
+from bs4 import BeautifulSoup
 
 
 # 实现解析器的类
