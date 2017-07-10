@@ -1,21 +1,21 @@
 # coding:utf8
 
-''''' 
-crawler main function, call for other function 
- 
-Created on 2015-12-31 
- 
-'''
+"""
+crawler main function, call for other function
+Created on 2015-12-31
+"""
 
-class HtmlOutput():
+
+class HtmlOutput(object):
+
     def __init__(self):
         # 设置一个列表保存数据
-        self.datas = []
+        self.data = []
 
     def collect_data(self, data):
         if data is None:
             return
-        self.datas.append(data)
+        self.data.append(data)
 
     def output_html(self):
         with open("output.html", "w", encoding="utf-8") as fout:
@@ -26,12 +26,9 @@ class HtmlOutput():
             fout.write("<body>")
             fout.write("<table>")
 
-            for data in self.datas:
+            for data in self.data:
                 fout.write("<tr>")
-                fout.write("<td>%s</td>" %data['url'])
-                fout.write("<td>%s</td>" %data['title'])
-                fout.write("<td>%s</td>" %data['summary'])
-
+                fout.write(data)
 
                 """ 
                 print("\n**********\n") 
