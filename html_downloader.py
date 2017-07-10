@@ -5,8 +5,8 @@ crawler main function, call for other function
 Created on 2015-12-31
 """
 
-import socket
 from http.client import UnknownProtocol
+
 from urllib import request, error, parse
 
 

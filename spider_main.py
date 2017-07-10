@@ -36,7 +36,7 @@ class SpiderMain(object):
             # 从管理器获取一个新url
             new_url = self.urls.get_new_url()
             # 打印爬虫信息
-            print("crawle %d : %s----------------------start\n" % (count, new_url))
+            print("crawle %d : %s---------------------- start\n" % (count, new_url))
             # 利用下载器下载网页内容
             html_content = self.downloader.download(new_url)
 
@@ -49,7 +49,7 @@ class SpiderMain(object):
             self.outputer.collect_data(new_data)
             self.urls.add_new_urls(new_urls)
             # 打印爬虫信息
-            print("crawle %d : %s----------------------done\n" % (count, new_url))
+            print("crawle %d : %s---------------------- done\n" % (count, new_url))
             print("总数据：\n")
             print(len(self.urls.old_urls), "--------Done url:", self.urls.old_urls, "----------")
             print(len(self.urls.new_urls), "--------Todo url:", self.urls.new_urls, "----------")
@@ -67,8 +67,8 @@ class SpiderMain(object):
 
 if __name__ == "__main__":
     # 开始url
-    root_url = "http://bbs.fobshanghai.com/index.php"
-    # root_url = "http://bbs.fobshanghai.com/thread-5931523-1-1.html"
+    # root_url = "http://bbs.fobshanghai.com/index.php"
+    root_url = "http://bbs.fobshanghai.com/thread-5931523-1-1.html"
     # root_url = "http://bbs.fobshanghai.com/thread-6270093-1-1.html"
     # 创建一个爬虫
     obj_spider = SpiderMain()
