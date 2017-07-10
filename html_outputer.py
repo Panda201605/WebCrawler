@@ -10,21 +10,20 @@ class HtmlOutput(object):
 
     def __init__(self):
         # 设置一个列表保存数据
-        self.data = []
+        self.data = set()
 
     def collect_data(self, data):
         if data is None:
             return
-        self.data.append(data)
+        self.data = self.data | data
 
     def output_html(self):
         with open("output.html", "w", encoding="utf-8") as fout:
-            fout.write("<html>")
-            fout.write("<head>")
+            fout.write("<html>\n")
+            fout.write("<head>\n")
             # 添加页面头标签中的编码格式
-            fout.write('<meta http-equiv="content-type" content="text/html;charset=utf-8">')
-            fout.write("<body>")
-            fout.write("<table>")
+            fout.write('<meta http-equiv="content-type" content="text/html;charset=utf-8">\n')
+            fout.write("<body>\n<br/>\n<table>\n")
 
             for data in self.data:
                 fout.write("<tr>")
@@ -38,7 +37,7 @@ class HtmlOutput(object):
                 print("\n**********\n") 
                 """
 
-                fout.write("</tr>")
+                fout.write("</tr><br/>\n")
 
             fout.write("</table>")
             fout.write("</body>")

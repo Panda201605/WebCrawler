@@ -18,7 +18,7 @@ class HtmlParse(object):
 
         new_urls = set()
         # 匹配/view/123.htm形式的url，得到所有的词条url
-        links = soup.find_all("a", href=re.compile(r".*"))
+        links = soup.find_all("a", href=re.compile(r"^(http://bbs.fobshanghai.com).*"))
         for link in links:
             new_url = link['href']
             new_full_url = urljoin(page_url, new_url)
@@ -31,19 +31,18 @@ class HtmlParse(object):
         # 从网页解析中获得数据
 
         # 存储数据的集合
-        res_data = []
+        res_data = set()
 
         # 根据页面的特征，获取邮箱
-        email_regexp = re.compile("\w+@\w+\.\w+")
+        email_regexp = re.compile(r"^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+")
         emails = soup.find_all(text=email_regexp)
 
         # 保存邮箱地址
-        res_data.append(emails)
+        res_data = set(emails)
 
-        """ 
         print("这是res——data：\n") 
         print(res_data)
-        """
+
         return res_data
 
     def parse(self, page_url, html_content):
@@ -56,10 +55,10 @@ class HtmlParse(object):
         soup = BeautifulSoup(html_content, "html.parser", from_encoding="utf-8")
         new_urls = self._get_new_urls(page_url, soup)
         new_data = self._get_new_data(page_url, soup)
-        """ 
+
         print("parser----------new_urls:\n") 
         print(new_urls) 
         print("parser----------new_data:\n") 
         print(new_data) 
-        """
+
         return new_urls, new_data

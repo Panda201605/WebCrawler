@@ -5,8 +5,9 @@ crawler main function, call for other function
 Created on 2015-12-31
 """
 
-# 导入urllib（python3特有）
-from urllib import request
+import socket
+from http.client import UnknownProtocol
+from urllib import request, error, parse
 
 
 class HtmlDownload(object):
@@ -19,8 +20,22 @@ class HtmlDownload(object):
         if url is None:
             return None
 
-        with request.urlopen(url) as response:
+        url = parse.quote(url, safe='/:?=')
+        print(url)
+        try:
+            response = request.urlopen(url, timeout=2)
             if response.status != 200:
+                print("Failed:%s, status:%s" % url, response.status)
                 return None
             else:
-                return response.read()
+                result = response.read()
+                print("这是获取到的html--------")
+                print(result)
+                return result
+        except UnknownProtocol as sp:
+            print(sp)
+            return None
+        except error.HTTPError as e:
+            print(e)
+            return None
+

@@ -35,18 +35,28 @@ class SpiderMain(object):
         while self.urls.has_new_url():
             # 从管理器获取一个新url
             new_url = self.urls.get_new_url()
+            # 打印爬虫信息
+            print("crawle %d : %s----------------------start\n" % (count, new_url))
             # 利用下载器下载网页内容
             html_content = self.downloader.download(new_url)
+
+            if html_content is None:
+                continue
+
             # 解析下载得到的网页内容,得到新的url和数据
             new_urls, new_data = self.parser.parse(new_url, html_content)
             # 将解析的数据存入输出器,解析的url批量加入管理器
             self.outputer.collect_data(new_data)
             self.urls.add_new_urls(new_urls)
             # 打印爬虫信息
-            print("crawle %d : %s\n" % (count, new_url))
+            print("crawle %d : %s----------------------done\n" % (count, new_url))
+            print("总数据：\n")
+            print(len(self.urls.old_urls), "--------Done url:", self.urls.old_urls, "----------")
+            print(len(self.urls.new_urls), "--------Todo url:", self.urls.new_urls, "----------")
+            print(len(self.outputer.data), "--------Emials:", self.outputer.data, "----------")
 
             # 只爬取1000个页面
-            if count >= 100:
+            if count >= 10000:
                 break
             count = count + 1
 
@@ -56,9 +66,10 @@ class SpiderMain(object):
 
 
 if __name__ == "__main__":
-
     # 开始url
-    root_url = "http://bbs.fobshanghai.com/"
+    root_url = "http://bbs.fobshanghai.com/index.php"
+    # root_url = "http://bbs.fobshanghai.com/thread-5931523-1-1.html"
+    # root_url = "http://bbs.fobshanghai.com/thread-6270093-1-1.html"
     # 创建一个爬虫
     obj_spider = SpiderMain()
     # 启动爬虫
