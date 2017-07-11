@@ -7,10 +7,7 @@ Created on 2015-12-31
 @author: Itachi
 """
 
-import html_downloader
-import html_outputer
-import html_parser
-import url_manager
+from spider import html_downloader, html_outputer, html_parser, url_manager
 
 
 class SpiderMain(object):
