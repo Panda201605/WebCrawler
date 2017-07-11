@@ -12,8 +12,7 @@ from bs4 import BeautifulSoup
 
 # 实现解析器的类
 class HtmlParse(object):
-    @staticmethod
-    def __get_new_urls(page_url, soup):
+    def __get_new_urls(self, page_url, soup):
         # 从网页解析中获得url
 
         new_urls = set()
@@ -26,12 +25,8 @@ class HtmlParse(object):
 
         return new_urls
 
-    @staticmethod
-    def _get_new_data(page_url, soup):
+    def __get_new_data(self, soup):
         # 从网页解析中获得数据
-
-        # 存储数据的集合
-        res_data = set()
 
         # 根据页面的特征，获取邮箱
         email_regexp = re.compile(r"^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+")
@@ -44,6 +39,24 @@ class HtmlParse(object):
         print(res_data)
 
         return res_data
+
+    def parse(self, page_url, html_content):
+        # 解析网页，获取邮箱及其他网址
+
+        if page_url is None or html_content is None:
+            return
+
+        # 使用beautifulsoup进行解析
+        soup = BeautifulSoup(html_content, "html.parser", from_encoding="utf-8")
+        new_urls = self.__get_new_urls(page_url, soup)
+        new_data = self.__get_new_data(soup)
+
+        print("parser----------new_urls:\n")
+        print(new_urls)
+        print("parser----------new_data:\n")
+        print(new_data)
+
+        return new_urls, new_data
 
     def parse_ip(self, html_response):
 
@@ -61,21 +74,3 @@ class HtmlParse(object):
             proxy = {tds[5].get_text().lower(): temp_str}
             res_data.append(proxy)
         return res_data
-
-    def parse(self, page_url, html_content):
-        # 解析网页
-
-        if page_url is None or html_content is None:
-            return
-
-        # 使用beautifulsoup进行解析
-        soup = BeautifulSoup(html_content, "html.parser", from_encoding="utf-8")
-        new_urls = self.__get_new_urls(page_url, soup)
-        new_data = self._get_new_data(page_url, soup)
-
-        print("parser----------new_urls:\n")
-        print(new_urls)
-        print("parser----------new_data:\n")
-        print(new_data)
-
-        return new_urls, new_data
