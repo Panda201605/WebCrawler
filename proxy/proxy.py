@@ -1,36 +1,54 @@
 # encoding:utf8
 
-import time
 import random
-from bs4 import BeautifulSoup
+
 from httpclient.client import HttpClient
+from spider.html_parser import HtmlParse
 
 
 class ProxyPoll(object):
     """
-    代理池
+    代理ip池
     """
 
-    def __init__(self, proxy_web_ips):
+    def __init__(self, proxy_web):
         # 初始化代理池
 
         self.ip_pool = set()
-        self.proxy_finder = proxy_web_ips
         self.http_client = HttpClient()
+        self.add_ip_pool(proxy_web)
 
-    def get_proxies(self):
-        # 确保代理ip可用
+    def add_ip_pool(self, proxy_web):
+        # 添加网页上的代理ip
+        response = HttpClient.get_response(proxy_web)
+        add_pool = HtmlParse.parse_ip(response)
+        self.ip_pool = self.ip_pool | add_pool
 
-        for p in self.ip_pool:
-            if self.http_client.is_alive(p):
-                continue
-            else:
-                self.ip_pool.remove(p)
-
-    def get_one_proxy(self):
+    def get_proxy(self):
         # 取出一个代理ip
+        proxy = random.choice(self.ip_pool)
+        # proxy为空暂未处理，后期处理
+        if self.is_alive(proxy):
+            return proxy
+        else:
+            self.del_proxy(proxy)
+            return self.get_proxy()
 
-        return random.choice(self.ip_pool)
+    def del_proxy(self, proxy):
+        # 从代理ip池中删除
+        self.ip_pool.discard(proxy)
+
+    def is_alive(self, proxy):
+        # 测试代理ip是否可用
+
+        try:
+            resp = self.get_response(self.test_url, proxy=proxy)
+            print(resp.read())
+            if resp.code == 200:
+                return True
+        except BaseException as be:
+            print(be)
+            return False
 
     def write_to_text(self, file_path):
         # 持久化ip代理池
@@ -42,20 +60,3 @@ class ProxyPoll(object):
             fp.close()
         except IOError:
             print("fail to open file")
-
-    def find(self):
-        # 从代理服务器上爬取代理ip
-
-        for i in range(1, 10):
-            content = self.http_client.getresponse(self.url + str(i))
-            soup = BeautifulSoup(content)
-            ips = soup.findAll('tr')
-            for x in range(2, len(ips)):
-                ip = ips[x]
-                tds = ip.findAll("td")
-                if tds is None:
-                    continue
-                ip_temp = tds[1].contents[0] + ":" + tds[2].contents[0]
-                self.ip_pool.append(ip_temp)
-            time.sleep(1)
-            return self.ip_pool

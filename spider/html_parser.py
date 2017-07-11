@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 # 实现解析器的类
 class HtmlParse(object):
     @staticmethod
-    def _get_new_urls(page_url, soup):
+    def __get_new_urls(page_url, soup):
         # 从网页解析中获得url
 
         new_urls = set()
@@ -40,9 +40,26 @@ class HtmlParse(object):
         # 保存邮箱地址
         res_data = set(emails)
 
-        print("这是res——data：\n") 
+        print("这是res——data：\n")
         print(res_data)
 
+        return res_data
+
+    def parse_ip(self, html_response):
+
+        # 存储数据的集合
+        res_data = set()
+        # 使用beautifulsoup进行解析
+        soup = BeautifulSoup(html_response, "html.parser", from_encoding="utf-8")
+        table = soup.find('table', attrs={'id': 'ip_list'})
+        tr = table.find_all('tr')[1:]
+
+        # 解析得到代理ip的地址，端口，和类型
+        for item in tr:
+            tds = item.find_all('td')
+            temp_str = "%s:%s" % tds[1].get_text().lower(), tds[2].get_text().lower()
+            proxy = {tds[5].get_text().lower(): temp_str}
+            res_data.append(proxy)
         return res_data
 
     def parse(self, page_url, html_content):
@@ -53,12 +70,12 @@ class HtmlParse(object):
 
         # 使用beautifulsoup进行解析
         soup = BeautifulSoup(html_content, "html.parser", from_encoding="utf-8")
-        new_urls = self._get_new_urls(page_url, soup)
+        new_urls = self.__get_new_urls(page_url, soup)
         new_data = self._get_new_data(page_url, soup)
 
-        print("parser----------new_urls:\n") 
-        print(new_urls) 
-        print("parser----------new_data:\n") 
-        print(new_data) 
+        print("parser----------new_urls:\n")
+        print(new_urls)
+        print("parser----------new_data:\n")
+        print(new_data)
 
         return new_urls, new_data
