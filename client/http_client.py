@@ -36,7 +36,10 @@ class HttpClient(object):
     def get_response_content(self, url, timeout=5, proxy=None, retry_times=2):
         # 获取网站内容
         response = self.get_response(url, timeout, proxy, retry_times)
-        return response.read()
+        if response is None:
+            return None
+        else:
+            return response.read()
 
     def get_response(self, url, timeout=5, proxy=None, retry_times=2):
         # 获取请求结果
@@ -47,10 +50,11 @@ class HttpClient(object):
                 response = self.__get_response_without_proxy(url, timeout, header)
                 return response
             except BaseException as be:
+                print("url:", url, "header:", header, "proxy:", proxy)
                 if retry_times > 0:
                     print(u"获取网页错误：", be, " ，10s后将获取倒数第：", retry_times, u"次")
                     time.sleep(10)
-                    return self.get_response(url, timeout, retry_times - 1)  # 调用自身并将次数减1
+                    return self.get_response(url, timeout, retry_times=retry_times - 1)  # 调用自身并将次数减1
                 else:
                     print("请求失败")
                     return None
@@ -59,10 +63,11 @@ class HttpClient(object):
                 response = self.__get_response_with_proxy(url, timeout, header, proxy)
                 return response
             except BaseException as be:
+                print("url:", url, "header:", header, "proxy:", proxy)
                 if retry_times > 0:
                     print(u"获取网页错误：", be, " ，10s后将获取倒数第：", retry_times, u"次")
                     time.sleep(10)
-                    return self.get_response(url, timeout, retry_times - 1)  # 调用自身并将次数减1
+                    return self.get_response(url, timeout, proxy=proxy, retry_times=retry_times - 1)  # 调用自身并将次数减1
                 else:
                     print("请求失败")
                     return None

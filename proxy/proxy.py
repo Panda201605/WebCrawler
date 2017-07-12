@@ -29,7 +29,8 @@ class ProxyPoll(object):
 
     def get_proxy(self):
         # 取出一个代理ip
-        proxy = random.choice(self.ip_pool)
+        proxy_str = random.sample(self.ip_pool, 1)[0]
+        proxy = eval(proxy_str)
         # proxy为空暂未处理，后期处理
         if self.is_alive(proxy):
             return proxy
@@ -38,15 +39,15 @@ class ProxyPoll(object):
             return self.get_proxy()
 
     def del_proxy(self, proxy):
+        proxy_str = repr(proxy)
         # 从代理ip池中删除
-        self.ip_pool.discard(proxy)
+        self.ip_pool.discard(proxy_str)
 
     def is_alive(self, proxy):
         # 测试代理ip是否可用
 
         try:
-            resp = self.get_response(self.test_url, proxy=proxy)
-            print(resp.read())
+            resp = self.http_client.get_response(self.test_url, proxy=proxy)
             if resp.code == 200:
                 return True
         except BaseException as be:
