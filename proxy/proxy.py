@@ -22,7 +22,7 @@ class ProxyPoll(object):
 
     def add_ip_pool(self, proxy_web):
         # 添加网页上的代理ip
-        response = HttpClient.get_response(proxy_web)
+        response = self.http_client.get_response(proxy_web)
         add_pool = HtmlParse.parse_ip(response)
         self.ip_pool = self.ip_pool | add_pool
 
