@@ -65,12 +65,12 @@ class HtmlParse(object):
         # 使用beautifulsoup进行解析
         soup = BeautifulSoup(html_response, "html.parser", from_encoding="utf-8")
         table = soup.find('table', attrs={'id': 'ip_list'})
-        tr = table.find_all('tr')[1:]
+        tr = table.find_all('tr')[2:]
 
         # 解析得到代理ip的地址，端口，和类型
         for item in tr:
             tds = item.find_all('td')
-            temp_str = "%s:%s" % tds[1].get_text().lower(), tds[2].get_text().lower()
+            temp_str = "%s:%s" % (tds[1].get_text().lower(), tds[2].get_text().lower())
             proxy = {tds[5].get_text().lower(): temp_str}
-            res_data.append(proxy)
+            res_data.add(repr(proxy))
         return res_data

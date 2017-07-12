@@ -17,13 +17,14 @@ class ProxyPoll(object):
         self.ip_pool = set()
         self.test_url = "https://www.baidu.com/"
         self.http_client = HttpClient()
+        self.html_parse = HtmlParse()
         if proxy_web is not None:
             self.add_ip_pool(proxy_web)
 
     def add_ip_pool(self, proxy_web):
         # 添加网页上的代理ip
         response = self.http_client.get_response(proxy_web)
-        add_pool = HtmlParse.parse_ip(response)
+        add_pool = self.html_parse.parse_ip(response)
         self.ip_pool = self.ip_pool | add_pool
 
     def get_proxy(self):
