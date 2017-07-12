@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # 开始url
     root_web = "http://bbs.fobshanghai.com/thread-5931523-1-1.html"
     # 获取免费代理ip网址
-    proxy_web = "http://www.xicidaili.com"
+    proxy_web = "http://www.xicidaili.com/nn"
     # 创建一个爬虫
     obj_spider = SpiderMain()
     # 启动爬虫
