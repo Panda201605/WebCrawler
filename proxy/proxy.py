@@ -2,7 +2,7 @@
 
 import random
 
-from httpclient.client import HttpClient
+from client.http_client import HttpClient
 from spider.html_parser import HtmlParse
 
 
@@ -11,12 +11,14 @@ class ProxyPoll(object):
     代理ip池
     """
 
-    def __init__(self, proxy_web):
+    def __init__(self, proxy_web=None):
         # 初始化代理池
 
         self.ip_pool = set()
+        self.test_url = "https://www.baidu.com/"
         self.http_client = HttpClient()
-        self.add_ip_pool(proxy_web)
+        if proxy_web is not None:
+            self.add_ip_pool(proxy_web)
 
     def add_ip_pool(self, proxy_web):
         # 添加网页上的代理ip

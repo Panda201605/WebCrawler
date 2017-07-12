@@ -33,6 +33,11 @@ class HttpClient(object):
             "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
         ]
 
+    def get_response_content(self, url, timeout=5, proxy=None, retry_times=2):
+        # 获取网站内容
+        response = self.get_response(url, timeout, proxy, retry_times)
+        return response.read()
+
     def get_response(self, url, timeout=5, proxy=None, retry_times=2):
         # 获取请求结果
         header = {"User-Agent": random.choice(self.user_agent_list)}  # 构造一个完整的User_Agent
